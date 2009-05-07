@@ -1,0 +1,23 @@
+#avatarHolder {
+    height: 240px;
+    width: 240px;
+    border: 1em solid black;
+    float: left;
+    margin-right: 1.5em; 
+}
+#sample-images a {
+    background-color:#ECECEC;
+    display:block;
+    float:left;
+    margin: 0px; padding: 2px;
+}
+
+
+ul#sample-images {
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+    margin: 0; padding: 0;
+}
+
+ul#sample-images li { display: inline; }

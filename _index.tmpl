@@ -1,0 +1,15 @@
+[% PROCESS _header.tmpl %]
+
+<table border="0" cellspacing="0" cellpadding="10px" width="100%">
+    <tr>
+        <td width="100%" valign="top">
+            <ul>
+                [% FOREACH artist IN artists %]
+                    <li><a href="[% artist | uri %].html">[% artist | html %]</a></li>
+                [% END %]
+            </ul>
+        </td>
+    </tr>
+</table>
+
+[% PROCESS _footer.tmpl %]
