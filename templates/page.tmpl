@@ -1,0 +1,46 @@
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+
+<tr><td>
+
+<h1>[% artistName | html %]</h1>
+
+[% IF avatar %]
+<div style="height: 240px; width: 240px; border: 1em solid black;float: left; margin-right: 1.5em;"><img src="[% avatar | html %]" height="240" width="240" alt="avatar" /></div>
+[% END %]
+
+[% IF description %]
+    [% description | html_para %]
+[% END %]
+
+</td>
+<td width="231" valign="top" style="padding-top: 4em;">
+    <table border="0" cellspacing="0" cellpadding="2" width="100%">
+        [% IF samples %]
+        <tr><td class="sidebar_header">Samples</td></tr>
+        <tr><td>
+            <table id="sample-images">
+                [% USE samplesTable = table(samples, rows=samplesPerRow, pad=0) %] 
+                [% FOREACH items IN samplesTable.cols %]
+                <tr>
+                    [% FOREACH sample IN items %]
+                    <td style="background-color:#ECECEC; margin: 0px; padding: 2px;">
+                        [% IF (sample) %]
+                        <a rel="samples" href="[% sample.i | html %]"><img height="25" width="25" src="[% sample.t | html %]" alt="sample Image"/></a>
+                        [% END %]
+                    </td>
+                    [% END %]
+                </tr>
+                [% END %]
+            </table>
+        </td></tr>
+        [% END %]
+
+        <tr><td class="sidebar_header">Links</td></tr>
+        <tr><td>
+            <a href="http://www.AnimeEvolution.com/" title="Anime Evolution">Anime Evolution</a><br />
+            [% FOREACH link IN links %]
+                <a href="[% link.link | html %]" title="[% link.name %]">[% link.name %]</a><br />
+            [% END %]
+        </td></tr>
+    </table>
+</td></tr></table>

@@ -8,21 +8,24 @@ use Regexp::Common qw[Email::Address];
 use File::Copy;
 
 ### MUST CHANGE
-my @artists = qw(Greenishio Maires);
+my @artists = qw(Greenishio); # Maires);
 
-my $OUTPUT_DIR = "/Users/halkeye/sshfs/meowcat/apache/vhosts/www.kodekoan.com/htdocs/files/ag2009";
-#my $OUTPUT_DIR = "/Users/halkeye/Sites/ae";
+#my $OUTPUT_DIR = "/Users/halkeye/sshfs/meowcat/apache/vhosts/www.kodekoan.com/htdocs/files/ag2009";
+my $OUTPUT_DIR = "/Users/halkeye/Sites/ae";
 
 ### LESS LIKELY TO CHANGE
 my $THUMBNAIL_SIZE = 20;
-my $SAMPLES_PER_ROW = 20;
+my $SAMPLES_PER_ROW = 5;
 my $CONVERT = "/opt/local/bin/convert";
 
 
 ### DON'T CHANGE ANYTHING
 
 my $template = Template->new({
-        'INCLUDE_PATH' => ['.'],
+        'INCLUDE_PATH' => ['./templates/'],
+#        'PRE_PROCESS'  => 'real_header.tmpl',
+#        'POST_PROCESS' => 'real_footer.tmpl', 
+        'POST_CHOMP'   => 1,
 }) || die Template->error();
 
 foreach my $artist (@artists)
@@ -94,7 +97,7 @@ foreach my $artist (@artists)
     ####
     
     my $output;
-    $template->process('_page.tmpl', $vars, \$output)
+    $template->process('page.tmpl', $vars, \$output)
         || die $template->error();
 
     open(OUTPUT, ">", "$OUTPUT_DIR/$artist.html");
@@ -108,7 +111,7 @@ foreach my $artist (@artists)
         foreach my $i (('artists',$artist,'samples','thumbs'))
         {
             $dir .= '/'.$i;
-            mkdir($dir) unless (-e $i);
+            mkdir($dir) unless (-e $dir);
         }
     }
 
@@ -138,7 +141,7 @@ foreach my $artist (@artists)
 ####
 
 my $output;
-$template->process('_index.tmpl', { 'artists' => \@artists }, \$output)
+$template->process('index.tmpl', { 'artists' => \@artists }, \$output)
     || die $template->error();
 
 open(OUTPUT, ">", "$OUTPUT_DIR/index.html");
