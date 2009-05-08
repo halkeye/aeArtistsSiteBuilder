@@ -23,8 +23,8 @@ my $CONVERT = "/opt/local/bin/convert";
 
 my $template = Template->new({
         'INCLUDE_PATH' => ['./templates/'],
-#        'PRE_PROCESS'  => 'real_header.tmpl',
-#        'POST_PROCESS' => 'real_footer.tmpl', 
+        'PRE_PROCESS'  => 'real_header.tmpl',
+        'POST_PROCESS' => 'real_footer.tmpl', 
         'POST_CHOMP'   => 1,
 }) || die Template->error();
 
