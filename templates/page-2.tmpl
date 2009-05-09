@@ -7,7 +7,7 @@
         <br />
     </td>
 [% END %]
-    <td valign="top">
+    <td valign="top"[% IF links %]rowspan="3"[% END %]>
         <table border="0" cellspacing="0" cellpadding="2" width="100%">
             <tr><td valign="top" class="sidebar_header">About</td></tr>
             <tr><td valign="top">
@@ -18,27 +18,12 @@
                 [% IF samples || links %]
                 <table border="0" cellspacing="0" cellpadding="2" width="100%">
                 <tr>
-
-                    [% IF links %]
-                    <td valign="top" class="sidebar_header">Links</td>
-                    [% END %]
-
                     [% IF samples %]
                     <td valign="top" class="sidebar_header">Samples</td>
                     [% END %]
 
                 </tr>
                 <tr>
-                    [% IF links %]
-                    <td>
-                        [% IF links %]
-                            [% FOREACH link IN links %]
-                                <a href="[% link.link | html %]" title="[% link.name %]">[% link.name %]</a><br />
-                            [% END %]
-                        [% END %]
-                    </td>
-                    [% END %]
-
                     [% IF samples %]
                     <td>
                         <table id="sample-images">
@@ -66,5 +51,17 @@
 
         </table>
     </td>
+    [% IF links %]
+    </tr><tr>
+    <td valign="top" class="sidebar_header">Links</td>
+    </tr><tr>
+    <td>
+        [% IF links %]
+            [% FOREACH link IN links %]
+                <a href="[% link.link | html %]" title="[% link.name %]">[% link.name %]</a><br />
+            [% END %]
+        [% END %]
+    </td>
+    [% END %]
 
 </td></tr></table>

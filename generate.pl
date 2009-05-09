@@ -11,22 +11,32 @@ use File::Copy;
 my @artists = qw(Greenishio); # Maires);
 
 #my $OUTPUT_DIR = "/Users/halkeye/sshfs/meowcat/apache/vhosts/www.kodekoan.com/htdocs/files/ag2009";
-my $OUTPUT_DIR = "/Users/halkeye/Sites/ae";
+my $MODE = "FAKE_AE";
 
 ### LESS LIKELY TO CHANGE
-my $THUMBNAIL_SIZE = 20;
-my $SAMPLES_PER_ROW = 5;
+my $THUMBNAIL_SIZE  = 20;
+my $SAMPLES_PER_ROW = 10;
 my $CONVERT = "/opt/local/bin/convert";
 
 
 ### DON'T CHANGE ANYTHING
+#
+my $params = {
+    'INCLUDE_PATH' => ['./templates/'],
+    'POST_CHOMP'   => 1,
+};
+my $OUTPUT_DIR;
 
-my $template = Template->new({
-        'INCLUDE_PATH' => ['./templates/'],
-        'PRE_PROCESS'  => 'real_header.tmpl',
-        'POST_PROCESS' => 'real_footer.tmpl', 
-        'POST_CHOMP'   => 1,
-}) || die Template->error();
+
+if ($MODE eq "FAKE_AE")
+{
+    $OUTPUT_DIR = "/Users/halkeye/Sites/ae";
+    $OUTPUT_DIR = "/Users/halkeye/sshfs/meowcat/apache/vhosts/ae09ag.kodekoan.com/htdocs";
+    $params->{'PRE_PROCESS'}  = 'real_header.tmpl';
+    $params->{'POST_PROCESS'} = 'real_footer.tmpl'; 
+}
+
+my $template = Template->new($params) || die Template->error();
 
 foreach my $artist (@artists)
 {
@@ -97,10 +107,10 @@ foreach my $artist (@artists)
     ####
     
     my $output;
-    $template->process('page.tmpl', $vars, \$output)
+    $template->process('page-2.tmpl', $vars, \$output)
         || die $template->error();
 
-    open(OUTPUT, ">", "$OUTPUT_DIR/$artist.html");
+    open(OUTPUT, ">", "$OUTPUT_DIR/$artist-2.html");
     print OUTPUT $output;
     close(OUTPUT);
 
@@ -128,11 +138,10 @@ foreach my $artist (@artists)
             system($CONVERT,"-thumbnail",$THUMBNAIL_SIZE, $sample->{'i'}, "$OUTPUT_DIR/$sample->{'t'}");
         }
     }
-    if ($vars->{avatar})
+    if ($vars->{avatar} && !-e "$OUTPUT_DIR/$vars->{avatar}")
     {
         print STDERR "Copying $artist avatar\n";
-        File::Copy::copy($vars->{avatar}, "$OUTPUT_DIR/$vars->{avatar}")
-            if (!-e "$OUTPUT_DIR/$vars->{avatar}");
+        File::Copy::copy($vars->{avatar}, "$OUTPUT_DIR/$vars->{avatar}");
     }
 }
     
