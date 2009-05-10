@@ -3,7 +3,13 @@
         <td width="100%" valign="top">
             <ul>
                 [% FOREACH artist IN artists %]
-                    <li><a href="[% artist | uri %].html">[% artist | html %]</a></li>
+                    <li>
+                        <a href="[% artist | uri %].html">[% artist | html %]</a>
+                        <a href="[% artist | uri %].html">(1)</a>
+                        <a href="[% artist | uri %]-2.html">(2)</a>
+                        <a href="[% artist | uri %]-3.html">(3)</a>
+                        <a href="[% artist | uri %]-4.html">(4)</a>
+                    </li>
                 [% END %]
             </ul>
         </td>

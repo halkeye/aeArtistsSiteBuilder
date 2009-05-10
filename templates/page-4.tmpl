@@ -1,0 +1,52 @@
+<h1>[% artistName | html %]</h1>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr>
+[% IF avatar %]
+    <td valign="top">
+        <div style="border: 1em solid black;margin-right: 0.5em;"><img src="[% avatar | html %]" height="150" width="150" alt="avatar" /></div>
+        <br />
+        [% IF samples %]
+            <table id="sample-images">
+                [% USE samplesTable = table(samples, rows=3, pad=0) %] 
+                [% FOREACH items IN samplesTable.cols %]
+                <tr>
+                    [% FOREACH sample IN items %]
+                    <td valign="top" style="background-color:#ECECEC; margin: 0px; padding: 2px; height: 50px; width: 50px; text-align: center; border: 2px solid #284771;">
+                        [% IF (sample) %]
+                        <a rel="samples" href="[% sample.i | html %]" style="border: 0px" target="_blank"><img style="border: 0px" src="[% sample.t | html %]" alt="sample Image"/></a>
+                        [% END %]
+                    </td>
+                    [% END %]
+                </tr>
+                [% END %]
+            </table>
+        [% END %]
+    </td>
+[% END %]
+    <td valign="top">
+        <table border="0" cellspacing="0" cellpadding="2" width="100%">
+            <tr><td valign="top" class="sidebar_header">About</td></tr>
+            <tr><td valign="top">
+                [% IF description %]
+                    [% description | html_para %]
+                [% END %]
+                [% IF links %]
+                    <table border="0" cellspacing="0" cellpadding="2" width="100%">
+                    <tr>
+                        [% IF samples %]
+                        <td valign="top" class="sidebar_header">Links</td>
+                        [% END %]
+
+                    </tr>
+                    [% FOREACH link IN links %]
+                    <tr><td><a href="[% link.link | html %]" title="[% link.name %]">[% link.name %]</a></td></tr>
+                    [% END %]
+                </table>
+                [% END %]
+        
+            </td></tr>
+
+        </table>
+    </td>
+
+</td></tr></table>

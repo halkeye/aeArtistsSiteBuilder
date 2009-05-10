@@ -8,16 +8,14 @@ use Regexp::Common qw[Email::Address];
 use File::Copy;
 
 ### MUST CHANGE
-my @artists = qw(Greenishio); # Maires);
+my @artists = qw(Greenishio Maires SaraA);
 
-#my $OUTPUT_DIR = "/Users/halkeye/sshfs/meowcat/apache/vhosts/www.kodekoan.com/htdocs/files/ag2009";
 my $MODE = "FAKE_AE";
 
 ### LESS LIKELY TO CHANGE
-my $THUMBNAIL_SIZE  = 20;
+my $THUMBNAIL_SIZE  = 50;
 my $SAMPLES_PER_ROW = 10;
 my $CONVERT = "/opt/local/bin/convert";
-
 
 ### DON'T CHANGE ANYTHING
 #
@@ -30,7 +28,7 @@ my $OUTPUT_DIR;
 
 if ($MODE eq "FAKE_AE")
 {
-    $OUTPUT_DIR = "/Users/halkeye/Sites/ae";
+#    $OUTPUT_DIR = "/Users/halkeye/Sites/ae";
     $OUTPUT_DIR = "/Users/halkeye/sshfs/meowcat/apache/vhosts/ae09ag.kodekoan.com/htdocs";
     $params->{'PRE_PROCESS'}  = 'real_header.tmpl';
     $params->{'POST_PROCESS'} = 'real_footer.tmpl'; 
@@ -106,13 +104,25 @@ foreach my $artist (@artists)
     #### Output Artists Page
     ####
     
-    my $output;
-    $template->process('page-2.tmpl', $vars, \$output)
-        || die $template->error();
+    {
+        my $output;
+        $template->process('page.tmpl', $vars, \$output)
+            || die $template->error();
 
-    open(OUTPUT, ">", "$OUTPUT_DIR/$artist-2.html");
-    print OUTPUT $output;
-    close(OUTPUT);
+        open(OUTPUT, ">", "$OUTPUT_DIR/$artist.html");
+        print OUTPUT $output;
+        close(OUTPUT);
+    }
+    foreach my $a (qw(2 3 4))
+    {
+        my $output;
+        $template->process("page-$a.tmpl", $vars, \$output)
+            || die $template->error();
+
+        open(OUTPUT, ">", "$OUTPUT_DIR/$artist-$a.html");
+        print OUTPUT $output;
+        close(OUTPUT);
+    }
 
 
     #### Output files
@@ -135,7 +145,7 @@ foreach my $artist (@artists)
         if (!-e "$OUTPUT_DIR/$sample->{'t'}")
         {
             print STDERR "Copying $artist thumb\n";
-            system($CONVERT,"-thumbnail",$THUMBNAIL_SIZE, $sample->{'i'}, "$OUTPUT_DIR/$sample->{'t'}");
+            system($CONVERT,"-thumbnail",$THUMBNAIL_SIZE.'x'.$THUMBNAIL_SIZE, $sample->{'i'}, "$OUTPUT_DIR/$sample->{'t'}");
         }
     }
     if ($vars->{avatar} && !-e "$OUTPUT_DIR/$vars->{avatar}")
