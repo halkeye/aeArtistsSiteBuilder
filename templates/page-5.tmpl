@@ -1,0 +1,33 @@
+[% IF samples %]
+    <div id="sample-images" style="float: right">
+        <h3>Samples</h3>
+        [% USE samplesTable = table(samples, cols=1, pad=0) %] 
+        [% FOREACH items IN samplesTable.cols %][% FOREACH sample IN items %]
+            <div style="background-color:#ECECEC; margin: 0px; padding: 2px; height: 50px; width: 50px; text-align: center; border: 2px solid #284771; margin-bottom: 1em;">
+                [% IF (sample) %]
+                <a rel="samples" href="[% sample.i | html %]" style="border: 0px" target="_blank"><img style="border: 0px" src="[% sample.t | html %]" alt="sample Image"/></a>
+                [% END %]
+            </div>
+        [% END %][% END %]
+    </div>
+[% END %]
+
+<h1>[% artistName | html %]</h1>
+
+<div style="border: 1em solid black; margin-left: 0.5em; float: left; margin-right: 1em; ">
+    <img src="[% avatar | html %]" height="150" width="150" alt="avatar" />
+</div>
+
+[% IF description %]
+    [% description | html_para %]
+[% END %]
+
+<br style="clear: left; " />
+
+[% IF links %]
+    <h3>Links</h3>
+    [% FOREACH link IN links %]
+    <div><a href="[% link.link | html %]" title="[% link.name %]">[% link.name %]</a></div>
+    [% END %]
+[% END %]
+        

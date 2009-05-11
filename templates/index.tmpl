@@ -4,11 +4,13 @@
             <ul>
                 [% FOREACH artist IN artists %]
                     <li>
-                        <a href="[% artist | uri %].html">[% artist | html %]</a>
-                        <a href="[% artist | uri %].html">(1)</a>
-                        <a href="[% artist | uri %]-2.html">(2)</a>
-                        <a href="[% artist | uri %]-3.html">(3)</a>
+                        [% artist | html %]
+                        <!--<s><a href="[% artist | uri %].html">(1)</a> - i'm meh about it </s>
+                        <s><a href="[% artist | uri %]-2.html">(2)</a> - simular to 6</s>
+                        <s><a href="[% artist | uri %]-3.html">(3)</a> - simular to 4</s> -->
                         <a href="[% artist | uri %]-4.html">(4)</a>
+                        <a href="[% artist | uri %]-5.html">(5)</a>
+                        <a href="[% artist | uri %]-6.html">(6)</a>
                     </li>
                 [% END %]
             </ul>

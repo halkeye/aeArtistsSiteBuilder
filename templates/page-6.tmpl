@@ -1,0 +1,79 @@
+<h1>[% artistName | html %]</h1>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr>
+[% IF avatar || links %]
+    <td valign="top">
+        [% IF avatar %]
+        <div style="border: 1em solid black;margin-right: 0.5em;"><img src="[% avatar | html %]" height="240" width="240" alt="avatar" /></div>
+        <br />
+        [% END %]
+
+        [% IF links %]
+            [% FOREACH link IN links %]
+                <div><a href="[% link.link | html %]" title="[% link.name %]">[% link.name %]</a></div>
+            [% END %]
+        [% END %]
+    </td>
+[% END %]
+    <td valign="top"[% IF links %]rowspan="3"[% END %]>
+        <table border="0" cellspacing="0" cellpadding="2" width="100%">
+            <tr><td valign="top" class="sidebar_header">About</td></tr>
+            <tr><td valign="top">
+                [% IF description %]
+                    [% description | html_para %]
+                [% END %]
+        
+                [% IF samples %]
+                <table border="0" cellspacing="0" cellpadding="2" width="100%">
+                <tr>
+                    [% IF samples %]
+                    <td valign="top" class="sidebar_header">Samples</td>
+                    [% END %]
+
+                </tr>
+                <tr>
+                    [% IF samples %]
+                    <td>
+                        <table id="sample-images">
+                            [% USE samplesTable = table(samples, rows=6, pad=0) %] 
+                            [% FOREACH items IN samplesTable.cols %]
+                            <tr>
+                                [% FOREACH sample IN items %]
+                                <td style="background-color:#ECECEC; margin: 0px; padding: 2px; height: 50px; width: 50px; text-align: center; border: 2px solid #284771; margin-bottom: 1em;">
+                                    [% IF (sample) %]
+                                    <a rel="samples" href="[% sample.i | html %]" style="border: 0px" target="_blank"><img style="border: 0px" src="[% sample.t | html %]" alt="sample Image"/></a>
+                                    [% END %]
+                                </td>
+                                [% END %]
+                            </tr>
+                            [% END %]
+                        </table>
+                    </td>
+                    [% END %]
+
+                    
+                    </tr>
+                </table>
+                [% END %]
+            </td></tr>
+
+        </table>
+    </td>
+</td></tr></table>
+    
+    <script type="text/javascript">
+    <!--
+jQuery(function() {
+	jQuery('head').append('<script type="text/javascript" src="js/jquery.lightbox-0.5.pack.js"><\/script>');
+	jQuery('head').append('<link rel="stylesheet" href="css/jquery.lightbox-0.5.css" type="text/css" media="screen" />');
+    jQuery('a[rel*=samples]').lightBox({
+        'imageLoading':  'images/lightbox-ico-loading.gif',
+        'imageBtnClose': 'images/lightbox-btn-close.gif',
+        'imageBtnPrev':  'images/lightbox-btn-prev.gif',
+        'imageBtnNext':  'images/lightbox-btn-next.gif',
+        'imageBlank':    'images/lightbox-blank.gif'
+    });
+});
+    
+    -->
+    </script>

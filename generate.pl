@@ -25,11 +25,10 @@ my $params = {
 };
 my $OUTPUT_DIR;
 
-
 if ($MODE eq "FAKE_AE")
 {
-#    $OUTPUT_DIR = "/Users/halkeye/Sites/ae";
-    $OUTPUT_DIR = "/Users/halkeye/sshfs/meowcat/apache/vhosts/ae09ag.kodekoan.com/htdocs";
+    $OUTPUT_DIR = "/Users/halkeye/Sites/ae";
+#    $OUTPUT_DIR = "/Users/halkeye/sshfs/meowcat/apache/vhosts/ae09ag.kodekoan.com/htdocs";
     $params->{'PRE_PROCESS'}  = 'real_header.tmpl';
     $params->{'POST_PROCESS'} = 'real_footer.tmpl'; 
 }
@@ -50,6 +49,7 @@ foreach my $artist (@artists)
         'samplesPerRow' => $SAMPLES_PER_ROW,
         'artistName' => ucfirst($artist),
         'description' => '',
+        'baseImageDir' => '/',
     };
 
     open(FH, "$dir/description.txt");
@@ -73,7 +73,7 @@ foreach my $artist (@artists)
         while (my $file = readdir($d))
         {
             next unless $file =~ /\.(?:jpg|gif|png|jpeg|bmp)/i;
-            push @{$vars->{'samples'}}, {'i'=>"$dir/samples/$file", 't'=>"$dir/samples/thumbs/$file"};
+            push @{$vars->{'samples'}}, {'i'=>"$dir/samples/$file", 't'=>"$dir/samples/thumbs/$file", 'file'=>$file};
         }
         closedir($d);
     }
@@ -104,16 +104,7 @@ foreach my $artist (@artists)
     #### Output Artists Page
     ####
     
-    {
-        my $output;
-        $template->process('page.tmpl', $vars, \$output)
-            || die $template->error();
-
-        open(OUTPUT, ">", "$OUTPUT_DIR/$artist.html");
-        print OUTPUT $output;
-        close(OUTPUT);
-    }
-    foreach my $a (qw(2 3 4))
+    foreach my $a (qw(4 5 6))
     {
         my $output;
         $template->process("page-$a.tmpl", $vars, \$output)
@@ -148,11 +139,13 @@ foreach my $artist (@artists)
             system($CONVERT,"-thumbnail",$THUMBNAIL_SIZE.'x'.$THUMBNAIL_SIZE, $sample->{'i'}, "$OUTPUT_DIR/$sample->{'t'}");
         }
     }
+
     if ($vars->{avatar} && !-e "$OUTPUT_DIR/$vars->{avatar}")
     {
         print STDERR "Copying $artist avatar\n";
         File::Copy::copy($vars->{avatar}, "$OUTPUT_DIR/$vars->{avatar}");
     }
+
 }
     
 ####
