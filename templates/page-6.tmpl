@@ -4,7 +4,7 @@
 [% IF avatar || links %]
     <td valign="top">
         [% IF avatar %]
-        <div style="border: 1em solid black;margin-right: 0.5em;"><img src="[% avatar | html %]" height="240" width="240" alt="avatar" /></div>
+        <div style="height: 240px; width: 240px; background-color: #ECECEC; border: 1em solid black; margin-right: 0.5em; text-align: center; "><img src="[% avatar | html %]" alt="avatar" /></div>
         <br />
         [% END %]
 
@@ -61,19 +61,4 @@
     </td>
 </td></tr></table>
     
-    <script type="text/javascript">
-    <!--
-jQuery(function() {
-	jQuery('head').append('<script type="text/javascript" src="js/jquery.lightbox-0.5.pack.js"><\/script>');
-	jQuery('head').append('<link rel="stylesheet" href="css/jquery.lightbox-0.5.css" type="text/css" media="screen" />');
-    jQuery('a[rel*=samples]').lightBox({
-        'imageLoading':  'images/lightbox-ico-loading.gif',
-        'imageBtnClose': 'images/lightbox-btn-close.gif',
-        'imageBtnPrev':  'images/lightbox-btn-prev.gif',
-        'imageBtnNext':  'images/lightbox-btn-next.gif',
-        'imageBlank':    'images/lightbox-blank.gif'
-    });
-});
-    
-    -->
-    </script>
+<script type="text/javascript"><![CDATA[  jQuery(function() { jQuery('head').append('<script type="text/javascript" src="[% baseImageDir %]/_lightBox/jquery.lightbox-0.5.pack.js"><\/script>'); jQuery('head').append('<link rel="stylesheet" href="[% baseImageDir %]/_lightBox/jquery.lightbox-0.5.css" type="text/css" media="screen" />'); jQuery('a[rel*=samples]').lightBox({'imageLoading':'[% baseImageDir %]/_lightBox/lightbox-ico-loading.gif', 'imageBtnClose': '[% baseImageDir %]/_lightBox/lightbox-btn-close.gif', 'imageBtnPrev':'[% baseImageDir %]/_lightBox/lightbox-btn-prev.gif','imageBtnNext':'[% baseImageDir %]/_lightBox/lightbox-btn-next.gif','imageBlank':'[% baseImageDir %]/_lightBox/lightbox-blank.gif'}); }); ]]></script>
