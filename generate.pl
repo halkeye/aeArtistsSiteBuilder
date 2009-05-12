@@ -113,18 +113,17 @@ foreach my $artist (keys %artists)
 
     #### Output files
 
-    my $baseImageDir = $OUTPUT_DIR.$vars->{'baseDir'}.'/artists/'.$artist.'/';
-    $vars->{'baseImageDir'} = $vars->{'baseDir'}.'/artists/'.$artist.'/';
-    system("mkdir", "-p", $baseImageDir) unless -e $baseImageDir;
+    $vars->{'baseImageDir'} = $vars->{'baseDir'}.'artists/'.$artist.'/';
+    system("mkdir", "-p", $OUTPUT_DIR.$vars->{'baseImageDir'})
+        unless -e $OUTPUT_DIR.$vars->{'baseImageDir'};
 
     foreach my $sample (@{$vars->{'samples'}})
     {
         my $origImage =  "$dir/samples/".$sample->{'i'};
         my $origThumb =  "$dir/samples/".$sample->{'t'};
         
-        my $sampleBaseDir = "$baseImageDir/samples/";
-        $sample->{'i'} = $sampleBaseDir.$sample->{'i'};
-        $sample->{'t'} = $sampleBaseDir.$sample->{'t'};
+        $sample->{'i'} = $vars->{'baseImageDir'}.$sample->{'i'};
+        $sample->{'t'} = $vars->{'baseImageDir'}.$sample->{'t'};
 
         system("mkdir", "-p", $OUTPUT_DIR.File::Basename::dirname($sample->{'i'}))
             unless -e $OUTPUT_DIR.File::Basename::dirname($sample->{'i'});
@@ -148,10 +147,13 @@ foreach my $artist (keys %artists)
 
     if ($vars->{avatar} && !-e $OUTPUT_DIR.$vars->{avatar})
     {
+        system("mkdir", "-p", $OUTPUT_DIR.File::Basename::dirname($vars->{avatar}))
+            unless -e $OUTPUT_DIR.File::Basename::dirname($vars->{avatar});
         print STDERR "Copying $artist avatar\n";
         File::Copy::copy($origAvatar, $OUTPUT_DIR.$vars->{avatar});
     }
 
+    $vars->{'baseDir'} =~ s{/+$}{}g;
     ####
     #### Output Artists Page
     ####
