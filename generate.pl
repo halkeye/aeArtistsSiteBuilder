@@ -11,8 +11,10 @@ use File::Basename ();
 ### MUST CHANGE
 my %artists = (
     'Greenishio'     => 'Greenishio',
-#    'Maires'         => 'Maires',
-#    'redhalfdragon'     => 'Red Halfdragon',
+    'Maires'         => 'Maires',
+    'redhalfdragon'  => 'Red Halfdragon',
+    'Rinki'          => 'Rinki', 
+    'Bandeau'        => 'Bandeau',
 );
 
 my $MODE = "FAKE_AE";
@@ -34,8 +36,8 @@ if ($MODE eq "FAKE_AE")
 {
 #   $OUTPUT_DIR = "/Users/halkeye/Sites/ae";
     $OUTPUT_DIR = "/Users/halkeye/sshfs/meowcat/apache/vhosts/ae09ag.kodekoan.com/htdocs";
-#    $params->{'PRE_PROCESS'}  = 'real_header.tmpl';
-#    $params->{'POST_PROCESS'} = 'real_footer.tmpl'; 
+    $params->{'PRE_PROCESS'}  = 'real_header.tmpl';
+    $params->{'POST_PROCESS'} = 'real_footer.tmpl'; 
 }
 
 sub defaultVars 
