@@ -4,7 +4,7 @@
 [% IF avatar || links %]
     <td valign="top" style="width: 260px;">
         [% IF avatar %]
-        <div style="height: 240px; width: 240px; background-color: #ECECEC; border: 1em solid black; margin-right: 0.5em; text-align: center; "><img src="[% avatar | html %]" alt="avatar" /></div>
+        <div style="height: 240px; width: 240px; border: 1em solid black; margin-right: 0.5em; text-align: center; vertical-align: middle; background: #ECECEC url([% avatar | html %]) no-repeat center;">&nbsp;</div>
         <br />
         [% END %]
 
@@ -26,13 +26,9 @@
                 [% IF samples %]
                 <table border="0" cellspacing="0" cellpadding="2" width="100%">
                 <tr>
-                    [% IF samples %]
                     <td valign="top" class="sidebar_header">Samples</td>
-                    [% END %]
-
                 </tr>
                 <tr>
-                    [% IF samples %]
                     <td>
                         <table id="sample-images">
                             [% USE samplesTable = table(samples, rows=6, pad=0) %] 
@@ -49,9 +45,6 @@
                             [% END %]
                         </table>
                     </td>
-                    [% END %]
-
-                    
                     </tr>
                 </table>
                 [% END %]

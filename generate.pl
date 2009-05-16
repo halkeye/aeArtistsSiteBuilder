@@ -15,6 +15,14 @@ my %artists = (
     'redhalfdragon'  => 'Red Halfdragon',
     'Rinki'          => 'Rinki', 
     'Bandeau'        => 'Bandeau',
+    'NivekOh'        => 'Nivek Oh',
+    'Mandachan'      => 'Mandachan',
+    'chun'           => 'Chun',
+    'iruka'          => 'Iruka',
+    'Lian'           => 'Lian',
+    'AlexiusSan'     => 'AlexiusSan',
+    'AsakuraMisakichi'=>'Asakura Misakichi',
+    'knightcat'      =>'knightcat',
 );
 
 my $MODE = "FAKE_AE";
@@ -34,8 +42,8 @@ my $OUTPUT_DIR;
 
 if ($MODE eq "FAKE_AE")
 {
-#   $OUTPUT_DIR = "/Users/halkeye/Sites/ae";
     $OUTPUT_DIR = "/Users/halkeye/sshfs/meowcat/apache/vhosts/ae09ag.kodekoan.com/htdocs";
+#    $OUTPUT_DIR = "/Users/halkeye/Sites/ae";
     $params->{'PRE_PROCESS'}  = 'real_header.tmpl';
     $params->{'POST_PROCESS'} = 'real_footer.tmpl'; 
 }
@@ -51,6 +59,7 @@ sub defaultVars
     
 
 my $template = Template->new($params) || die Template->error();
+my @artistsVars;
 
 foreach my $artist (keys %artists)
 {
@@ -80,9 +89,9 @@ foreach my $artist (keys %artists)
     ####
     #### SAMPLES 
     ####
-    $vars->{'samples'} = [];
     if (opendir(my $d, "$dir/samples/"))
     {
+        $vars->{'samples'} = [];
         while (my $file = readdir($d))
         {
             next unless $file =~ /\.(?:jpg|gif|png|jpeg|bmp)/i;
@@ -119,28 +128,31 @@ foreach my $artist (keys %artists)
     system("mkdir", "-p", $OUTPUT_DIR.$vars->{'baseImageDir'})
         unless -e $OUTPUT_DIR.$vars->{'baseImageDir'};
 
-    foreach my $sample (@{$vars->{'samples'}})
+    if (exists $vars->{'samples'})
     {
-        my $origImage =  "$dir/samples/".$sample->{'i'};
-        my $origThumb =  "$dir/samples/".$sample->{'t'};
-        
-        $sample->{'i'} = $vars->{'baseImageDir'}.$sample->{'i'};
-        $sample->{'t'} = $vars->{'baseImageDir'}.$sample->{'t'};
-
-        system("mkdir", "-p", $OUTPUT_DIR.File::Basename::dirname($sample->{'i'}))
-            unless -e $OUTPUT_DIR.File::Basename::dirname($sample->{'i'});
-        system("mkdir", "-p", $OUTPUT_DIR.File::Basename::dirname($sample->{'t'}))
-            unless -e $OUTPUT_DIR.File::Basename::dirname($sample->{'t'});
-
-        if (!-e $OUTPUT_DIR.$sample->{'i'})
+        foreach my $sample (@{$vars->{'samples'}})
         {
-            print STDERR "Copying $artist sample\n";
-            File::Copy::copy($origImage, $OUTPUT_DIR.$sample->{'i'});
-        }
-        if (!-e $OUTPUT_DIR.$sample->{'t'})
-        {
-            print STDERR "Copying $artist thumb\n";
-            system($CONVERT,"-thumbnail",$THUMBNAIL_SIZE.'x'.$THUMBNAIL_SIZE, $origImage, $OUTPUT_DIR.$sample->{'t'});
+            my $origImage =  "$dir/samples/".$sample->{'i'};
+            my $origThumb =  "$dir/samples/".$sample->{'t'};
+            
+            $sample->{'i'} = $vars->{'baseImageDir'}.$sample->{'i'};
+            $sample->{'t'} = $vars->{'baseImageDir'}.$sample->{'t'};
+
+            system("mkdir", "-p", $OUTPUT_DIR.File::Basename::dirname($sample->{'i'}))
+                unless -e $OUTPUT_DIR.File::Basename::dirname($sample->{'i'});
+            system("mkdir", "-p", $OUTPUT_DIR.File::Basename::dirname($sample->{'t'}))
+                unless -e $OUTPUT_DIR.File::Basename::dirname($sample->{'t'});
+
+            if (!-e $OUTPUT_DIR.$sample->{'i'})
+            {
+                print STDERR "Copying $artist sample\n";
+                File::Copy::copy($origImage, $OUTPUT_DIR.$sample->{'i'});
+            }
+            if (!-e $OUTPUT_DIR.$sample->{'t'})
+            {
+                print STDERR "Copying $artist thumb\n";
+                system($CONVERT,"-thumbnail",$THUMBNAIL_SIZE.'x'.$THUMBNAIL_SIZE, $origImage, $OUTPUT_DIR.$sample->{'t'});
+            }
         }
     }
 
@@ -162,6 +174,7 @@ foreach my $artist (keys %artists)
     
     my $output;
 
+    push @artistsVars, $vars;
     $template->process("page-6.tmpl", $vars, \$output)
         || die $template->error();
 
@@ -174,6 +187,14 @@ foreach my $artist (keys %artists)
 ####
 #### Output Main  Page
 ####
+
+my $output;
+$template->process('everyone.tmpl', { 'artists' => \@artistsVars }, \$output)
+    || die $template->error();
+
+open(OUTPUT, ">", "$OUTPUT_DIR/everyone.html");
+print OUTPUT $output;
+close(OUTPUT);
 
 =cut
 my $output;
