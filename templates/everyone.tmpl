@@ -1,4 +1,8 @@
 [% FOREACH artists %]
+[% SET everyone = 1 %]
 [% PROCESS "page-6.tmpl" %]
 <hr />
 [% END %]
+<script type="text/javascript"><!--
+jQuery(function() { jQuery('head').append('<script type="text/javascript" src="[% baseDir %]/_lightBox/jquery.lightbox-0.5.pack.js"><\/script>').append('<link rel="stylesheet" href="[% baseDir %]/_lightBox/jquery.lightbox-0.5.css" type="text/css" media="screen" />'); jQuery('a[rel*=samples]').lightBox({'imageLoading':'[% baseDir %]/_lightBox/lightbox-ico-loading.gif', 'imageBtnClose': '[% baseDir %]/_lightBox/lightbox-btn-close.gif', 'imageBtnPrev':'[% baseDir %]/_lightBox/lightbox-btn-prev.gif','imageBtnNext':'[% baseDir %]/_lightBox/lightbox-btn-next.gif','imageBlank':'[% baseDir %]/_lightBox/lightbox-blank.gif'}); }); 
+--></script>

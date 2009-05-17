@@ -23,7 +23,7 @@
                     [% description | html_para %]
                 [% END %]
         
-                [% IF samples %]
+                [% IF hasSamples %]
                 <table border="0" cellspacing="0" cellpadding="2" width="100%">
                 <tr>
                     <td valign="top" class="sidebar_header">Samples</td>
@@ -54,6 +54,8 @@
     </td>
 </td></tr></table>
     
+[% IF !everyone %]
 <script type="text/javascript"><!--
 jQuery(function() { jQuery('head').append('<script type="text/javascript" src="[% baseDir %]/_lightBox/jquery.lightbox-0.5.pack.js"><\/script>').append('<link rel="stylesheet" href="[% baseDir %]/_lightBox/jquery.lightbox-0.5.css" type="text/css" media="screen" />'); jQuery('a[rel*=samples]').lightBox({'imageLoading':'[% baseDir %]/_lightBox/lightbox-ico-loading.gif', 'imageBtnClose': '[% baseDir %]/_lightBox/lightbox-btn-close.gif', 'imageBtnPrev':'[% baseDir %]/_lightBox/lightbox-btn-prev.gif','imageBtnNext':'[% baseDir %]/_lightBox/lightbox-btn-next.gif','imageBlank':'[% baseDir %]/_lightBox/lightbox-blank.gif'}); }); 
 --></script>
+[% END %]

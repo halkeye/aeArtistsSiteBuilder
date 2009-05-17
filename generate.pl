@@ -23,6 +23,7 @@ my %artists = (
     'AlexiusSan'     => 'AlexiusSan',
     'AsakuraMisakichi'=>'Asakura Misakichi',
     'knightcat'      =>'knightcat',
+    'Keiseki'        => 'Keiseki',
 );
 
 my $MODE = "FAKE_AE";
@@ -89,6 +90,7 @@ foreach my $artist (keys %artists)
     ####
     #### SAMPLES 
     ####
+    $vars->{'hasSamples'} = 0;
     if (opendir(my $d, "$dir/samples/"))
     {
         $vars->{'samples'} = [];
@@ -96,6 +98,7 @@ foreach my $artist (keys %artists)
         {
             next unless $file =~ /\.(?:jpg|gif|png|jpeg|bmp)/i;
             push @{$vars->{'samples'}}, {'i'=>$file, 't'=>"thumbs/$file", 'file'=>$file};
+            $vars->{'hasSamples'} = 1;
         }
         closedir($d);
     }
