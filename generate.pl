@@ -9,21 +9,23 @@ use File::Copy;
 use File::Basename ();
 
 ### MUST CHANGE
-my %artists = (
-    'Greenishio'     => 'Greenishio',
-    'Maires'         => 'Maires',
-    'redhalfdragon'  => 'Red Halfdragon',
-    'Rinki'          => 'Rinki', 
-    'Bandeau'        => 'Bandeau',
-    'NivekOh'        => 'Nivek Oh',
-    'Mandachan'      => 'Mandachan',
-    'chun'           => 'Chun',
-    'iruka'          => 'Iruka',
-    'Lian'           => 'Lian',
-    'AlexiusSan'     => 'AlexiusSan',
-    'AsakuraMisakichi'=>'Asakura Misakichi',
-    'knightcat'      =>'knightcat',
-    'Keiseki'        => 'Keiseki',
+my @artists = (
+    ['Greenishio'     , 'Greenishio'],
+    ['Maires'         , 'Maires'],
+    ['redhalfdragon'  , 'Red Halfdragon'],
+    ['Rinki'          , 'Rinki'], 
+    ['Bandeau'        , 'Bandeau'],
+    ['NivekOh'        , 'Nivek Oh'],
+    ['Mandachan'      , 'Mandachan'],
+    ['chun'           , 'Chun'],
+    ['iruka'          , 'Iruka'],
+    ['Lian'           , 'Lian'],
+    ['AlexiusSan'     , 'AlexiusSan'],
+    ['AsakuraMisakichi','Asakura Misakichi'],
+    ['knightcat'      ,'knightcat'],
+    ['Keiseki'        , 'Keiseki'],
+    ['AmyDolphin'     , 'Amy Dolphin'],
+    ['Atashi'         , 'Atashi'],
 );
 
 my $MODE = "FAKE_AE";
@@ -32,6 +34,7 @@ my $MODE = "FAKE_AE";
 my $THUMBNAIL_SIZE  = 50;
 my $SAMPLES_PER_ROW = 10;
 my $CONVERT = "/opt/local/bin/convert";
+my $BASE_DIR = '/files/ArtGallery/09/';
 
 ### DON'T CHANGE ANYTHING
 #
@@ -54,7 +57,7 @@ sub defaultVars
     return {
         'samplesPerRow' => $SAMPLES_PER_ROW,
         'description'   => '',
-        'baseDir'  => '/files/ArtGallery/09/',
+        'baseDir'       => $BASE_DIR,
     };
 }
     
@@ -62,8 +65,9 @@ sub defaultVars
 my $template = Template->new($params) || die Template->error();
 my @artistsVars;
 
-foreach my $artist (keys %artists)
+foreach (@artists)
 {
+    my ($artist, $artistName) = @{$_};
     my $dir = "artists/$artist";
     print  STDERR "Processing $artist\n";
     if (!-e $dir)
@@ -73,7 +77,8 @@ foreach my $artist (keys %artists)
     }
 
     my $vars = defaultVars();
-    $vars->{'artistName'}  = $artists{$artist};
+    $vars->{'artistName'}  = $artistName;
+    $vars->{'artist'}  = $artist;
 
     open(FH, "$dir/description.txt");
     $vars->{'description'} = do { local($/) = undef; <FH>; };
@@ -192,7 +197,10 @@ foreach my $artist (keys %artists)
 ####
 
 my $output;
-$template->process('everyone.tmpl', { 'artists' => \@artistsVars }, \$output)
+$template->process('everyone.tmpl', { 
+        'artists' => \@artistsVars,
+        'baseDir' => $BASE_DIR,
+    }, \$output)
     || die $template->error();
 
 open(OUTPUT, ">", "$OUTPUT_DIR/everyone.html");
