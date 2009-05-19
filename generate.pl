@@ -26,7 +26,13 @@ my @artists = (
     ['Keiseki'        , 'Keiseki'],
     ['AmyDolphin'     , 'Amy Dolphin'],
     ['Atashi'         , 'Atashi'],
+    ['skun'           , "S' kun"],
+    ['Kat'            , "Kat"],
 );
+
+#@artists = ( 
+#    ['skun'           , "S' kun"],
+#);
 
 my $MODE = "FAKE_AE";
 

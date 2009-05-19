@@ -1,3 +1,4 @@
+[%- USE Markdown -%]
 <h1>[% artistName | html %]</h1>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr>
@@ -20,7 +21,7 @@
             <tr><td valign="top" class="sidebar_header">About</td></tr>
             <tr><td valign="top">
                 [% IF description %]
-                    [% description | html_para %]
+                    [% description | markdown %]
                 [% END %]
         
                 [% IF hasSamples %]
