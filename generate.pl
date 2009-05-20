@@ -28,7 +28,7 @@ my @artists = (
     ['Atashi'         , 'Atashi'],
     ['skun'           , "S' kun"],
     ['Kat'            , "Kat"],
-    ['RinnyChoamaster', 'Rinny / Choamaster'],
+    ['RinnyChaomaster', 'Rinny / Chaomaster'],
 );
 
 #@artists = ( 
