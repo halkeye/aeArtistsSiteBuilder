@@ -10,7 +10,7 @@ use File::Basename ();
 
 ### MUST CHANGE
 my @artists = (
-    ['Greenishio'     , 'Greenishio'],
+    ['Greenishio'     , 'Greenishio', 1],
     ['Maires'         , 'Maires'],
     ['redhalfdragon'  , 'Red Halfdragon'],
     ['Rinki'          , 'Rinki'], 
@@ -31,15 +31,10 @@ my @artists = (
     ['RinnyChaomaster', 'Rinny / Chaomaster'],
 );
 
-#@artists = ( 
-#    ['skun'           , "S' kun"],
-#);
-
 my $MODE = "FAKE_AE";
 
 ### LESS LIKELY TO CHANGE
 my $THUMBNAIL_SIZE  = 50;
-my $SAMPLES_PER_ROW = 10;
 
 my $BASE_DIR = '/files/ArtGallery/09/';
 
@@ -78,7 +73,6 @@ if ($MODE eq "FAKE_AE")
 sub defaultVars 
 {
     return {
-        'samplesPerRow' => $SAMPLES_PER_ROW,
         'description'   => '',
         'baseDir'       => $BASE_DIR,
     };
@@ -90,7 +84,7 @@ my @artistsVars;
 
 foreach (@artists)
 {
-    my ($artist, $artistName) = @{$_};
+    my ($artist, $artistName,$skipWatermark) = @{$_};
     my $dir = "artists/$artist";
     print  STDERR "Processing $artist\n";
     if (!-e $dir)
@@ -178,7 +172,14 @@ foreach (@artists)
             if (!-e $OUTPUT_DIR.$sample->{'i'})
             {
                 print STDERR "Copying $artist sample\n";
-                system($COMPOSITE, '-gravity', 'Center', '-dissolve', '25%', 'Sample-45.gif', $origImage, $OUTPUT_DIR.$sample->{'i'});
+                if (!$skipWatermark)
+                {
+                    system($COMPOSITE, '-gravity', 'Center', '-dissolve', '25%', 'Sample-45.gif', $origImage, $OUTPUT_DIR.$sample->{'i'});
+                }
+                else
+                {
+                    File::Copy::copy($origImage, $OUTPUT_DIR.$sample->{'i'});
+                }
                 
             }
             if (!-e $OUTPUT_DIR.$sample->{'t'})
