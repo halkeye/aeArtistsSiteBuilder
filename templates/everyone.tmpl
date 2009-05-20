@@ -1,12 +1,16 @@
 [% FOREACH artists %]
 [% SET everyone = 1 %]
 [% PROCESS "page-6.tmpl" %]
+[% IF !loop.last %]
 <hr />
 [% END %]
+[% END %]
 <script type="text/javascript"><!--
+var match = location.search.match(/artist=([a-zA-Z _-]*)/); 
+if (match && match[1]) { location.hash=match[1]; }
 jQuery('head')
     .append('<script type="text/javascript" src="[% baseDir %]/_lightBox/jquery.lightbox-0.5.pack.js"><\/script>').
     append('<link rel="stylesheet" href="[% baseDir %]/_lightBox/jquery.lightbox-0.5.css" type="text/css" media="screen" />');
-    var rels = {}; 
-    jQuery('a[rel*=sample]').each(function(a, b) { var rel = jQuery(b).attr('rel'); if (rels[rel]) { return; } rels[rel] = 1; jQuery('a[rel^='+rel+']').lightBox({'imageLoading':'[% baseDir %]/_lightBox/lightbox-ico-loading.gif', 'imageBtnClose': '[% baseDir %]/_lightBox/lightbox-btn-close.gif', 'imageBtnPrev':'[% baseDir %]/_lightBox/lightbox-btn-prev.gif','imageBtnNext':'[% baseDir %]/_lightBox/lightbox-btn-next.gif','imageBlank':'[% baseDir %]/_lightBox/lightbox-blank.gif'});});
+var rels = {}; 
+jQuery('a[rel*=sample]').each(function(a, b) { var rel = jQuery(b).attr('rel'); if (rels[rel]) { return; } rels[rel] = 1; jQuery('a[rel^='+rel+']').lightBox({'imageLoading':'[% baseDir %]/_lightBox/lightbox-ico-loading.gif', 'imageBtnClose': '[% baseDir %]/_lightBox/lightbox-btn-close.gif', 'imageBtnPrev':'[% baseDir %]/_lightBox/lightbox-btn-prev.gif','imageBtnNext':'[% baseDir %]/_lightBox/lightbox-btn-next.gif','imageBlank':'[% baseDir %]/_lightBox/lightbox-blank.gif'});});
 --></script>

@@ -20,7 +20,7 @@ my @artists = (
     ['chun'           , 'Chun'],
     ['iruka'          , 'Iruka'],
     ['Lian'           , 'Lian'],
-    ['AlexiusSan'     , 'AlexiusSan'],
+    ['AlexiusSana'    , 'AlexiusSana'],
     ['AsakuraMisakichi','Asakura Misakichi'],
     ['knightcat'      ,'knightcat'],
     ['Keiseki'        , 'Keiseki'],
@@ -28,6 +28,7 @@ my @artists = (
     ['Atashi'         , 'Atashi'],
     ['skun'           , "S' kun"],
     ['Kat'            , "Kat"],
+    ['RinnyChoamaster', 'Rinny / Choamaster'],
 );
 
 #@artists = ( 
@@ -39,7 +40,7 @@ my $MODE = "FAKE_AE";
 ### LESS LIKELY TO CHANGE
 my $THUMBNAIL_SIZE  = 50;
 my $SAMPLES_PER_ROW = 10;
-my $CONVERT = "/opt/local/bin/convert";
+
 my $BASE_DIR = '/files/ArtGallery/09/';
 
 ### DON'T CHANGE ANYTHING
@@ -50,10 +51,26 @@ my $params = {
 };
 my $OUTPUT_DIR;
 
+my $CONVERT = undef;
+foreach (qw(/opt/local/bin/convert /usr/local/bin/convert /usr/bin/convert))
+{
+    next unless -e $_;
+    $CONVERT = $_;
+    last;
+}
+my $COMPOSITE = undef;
+foreach (qw(/opt/local/bin/composite /usr/local/bin/composite /usr/bin/composite))
+{
+    next unless -e $_;
+    $COMPOSITE = $_;
+    last;
+}
+
 if ($MODE eq "FAKE_AE")
 {
-    $OUTPUT_DIR = "/Users/halkeye/sshfs/meowcat/apache/vhosts/ae09ag.kodekoan.com/htdocs";
-#    $OUTPUT_DIR = "/Users/halkeye/Sites/ae";
+    $OUTPUT_DIR = "/home/apache/vhosts/ae09ag.kodekoan.com/htdocs";
+    #$OUTPUT_DIR = "/Users/halkeye/sshfs/meowcat/apache/vhosts/ae09ag.kodekoan.com/htdocs";
+    #$OUTPUT_DIR = "/Users/halkeye/Sites/ae";
     $params->{'PRE_PROCESS'}  = 'real_header.tmpl';
     $params->{'POST_PROCESS'} = 'real_footer.tmpl'; 
 }
@@ -105,9 +122,10 @@ foreach (@artists)
     if (opendir(my $d, "$dir/samples/"))
     {
         $vars->{'samples'} = [];
-        while (my $file = readdir($d))
+        my @files = readdir($d);
+        @files = sort { $a cmp $b } grep { /\.(?:jpg|gif|png|jpeg|bmp)/i } @files;
+        foreach my $file (@files)
         {
-            next unless $file =~ /\.(?:jpg|gif|png|jpeg|bmp)/i;
             push @{$vars->{'samples'}}, {'i'=>$file, 't'=>"thumbs/$file", 'file'=>$file};
             $vars->{'hasSamples'} = 1;
         }
@@ -160,7 +178,8 @@ foreach (@artists)
             if (!-e $OUTPUT_DIR.$sample->{'i'})
             {
                 print STDERR "Copying $artist sample\n";
-                File::Copy::copy($origImage, $OUTPUT_DIR.$sample->{'i'});
+                system($COMPOSITE, '-gravity', 'Center', '-dissolve', '25%', 'Sample-45.gif', $origImage, $OUTPUT_DIR.$sample->{'i'});
+                
             }
             if (!-e $OUTPUT_DIR.$sample->{'t'})
             {
@@ -202,22 +221,29 @@ foreach (@artists)
 #### Output Main  Page
 ####
 
-my $output;
-$template->process('everyone.tmpl', { 
-        'artists' => \@artistsVars,
-        'baseDir' => $BASE_DIR,
-    }, \$output)
-    || die $template->error();
+{
+    my $output;
+    $template->process('everyone.tmpl', { 
+            'artists' => \@artistsVars,
+            'baseDir' => $BASE_DIR,
+        }, \$output)
+        || die $template->error();
 
-open(OUTPUT, ">", "$OUTPUT_DIR/everyone.html");
-print OUTPUT $output;
-close(OUTPUT);
+    open(OUTPUT, ">", "$OUTPUT_DIR/everyone.html");
+    print OUTPUT $output;
+    close(OUTPUT);
+}
 
-=cut
-my $output;
-$template->process('index.tmpl', { 'artists' => \@artists }, \$output)
-    || die $template->error();
+{
+    delete $params->{'PRE_PROCESS'};
+    delete $params->{'POST_PROCESS'};
+    $template = Template->new($params) ||
+        die Template->error();
+    my $output;
+    $template->process('vhost.conf.tmpl', { 'artists' => \@artistsVars }, \$output)
+        || die $template->error();
 
-open(OUTPUT, ">", "$OUTPUT_DIR/index.html");
-print OUTPUT $output;
-close(OUTPUT);
+    open(OUTPUT, ">", "httpd.conf");
+    print OUTPUT $output;
+    close(OUTPUT);
+}

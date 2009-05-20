@@ -1,0 +1,21 @@
+[% SET baseURL = "http://ae09ag.kodekoan.com/everyone.html" %]
+
+<VirtualHost *:80>
+	ServerName ae09.com
+	ServerAlias *.ae09.com
+	DocumentRoot /home/apache/vhosts/ae09.com/htdocs/
+
+	<Files .htaccess>
+		order allow,deny
+		deny from all
+	</Files>
+	
+	CustomLog "/var/log/httpd/ae09ag.com-access.log" combined
+	ErrorLog "/var/log/httpd/ae09ag.com-error.log"
+
+	RewriteEngine  on
+[% FOREACH artist = artists %]
+	RewriteRule    ^/[% artist.artist | html %].*   [% baseURL %]?artist=[% artist.artist | html %] [NC,L,R]
+[% END %]
+	RewriteRule    ^/.*                      [% baseURL %] [NC,L,R]
+</VirtualHost>
