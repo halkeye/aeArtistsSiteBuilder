@@ -32,7 +32,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <table id="sample-images">
+                        <table class="sample-images">
                             [% USE samplesTable = table(samples, rows=6, pad=0) %] 
                             [% FOREACH items IN samplesTable.cols %]
                             <tr>
@@ -54,7 +54,7 @@
 
         </table>
     </td>
-</td></tr></table>
+</tr></table>
     
 [% IF !everyone %]
 <script type="text/javascript"><!--

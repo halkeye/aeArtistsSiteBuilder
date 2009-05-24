@@ -248,3 +248,15 @@ foreach (@artists)
     print OUTPUT $output;
     close(OUTPUT);
 }
+{
+    my $output;
+    $template->process('everyone.tmpl', { 
+            'artists' => \@artistsVars,
+            'baseDir' => $BASE_DIR,
+        }, \$output)
+        || die $template->error();
+
+    open(OUTPUT, ">", "$OUTPUT_DIR/everyone-nolayout.html");
+    print OUTPUT $output;
+    close(OUTPUT);
+}
