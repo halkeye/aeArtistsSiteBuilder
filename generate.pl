@@ -47,6 +47,7 @@ my $params = {
     'POST_CHOMP'   => 1,
 };
 my $OUTPUT_DIR;
+my $OUTPUT_DIR2;
 
 my $CONVERT = undef;
 foreach (qw(/opt/local/bin/convert /usr/local/bin/convert /usr/bin/convert))
@@ -62,10 +63,15 @@ foreach (qw(/opt/local/bin/composite /usr/local/bin/composite /usr/bin/composite
     $COMPOSITE = $_;
     last;
 }
+    
+my $blankTemplate = Template->new($params) ||
+    die Template->error();
 
 if ($MODE eq "FAKE_AE")
 {
     $OUTPUT_DIR = "/home/apache/vhosts/ae09ag.kodekoan.com/htdocs";
+    $OUTPUT_DIR2 = "/home/apache/vhosts/ae09.com/htdocs/art";
+
     #$OUTPUT_DIR = "/Users/halkeye/sshfs/meowcat/apache/vhosts/ae09ag.kodekoan.com/htdocs";
     #$OUTPUT_DIR = "/Users/halkeye/Sites/ae";
     $params->{'PRE_PROCESS'}  = 'real_header.tmpl';
@@ -238,13 +244,9 @@ foreach (@artists)
 }
 
 {
-    delete $params->{'PRE_PROCESS'};
-    delete $params->{'POST_PROCESS'};
-    $template = Template->new($params) ||
-        die Template->error();
     my $output;
-    $template->process('vhost.conf.tmpl', { 'artists' => \@artistsVars }, \$output)
-        || die $template->error();
+    $blankTemplate->process('vhost.conf.tmpl', { 'artists' => \@artistsVars }, \$output)
+        || die $blankTemplate->error();
 
     open(OUTPUT, ">", "httpd.conf");
     print OUTPUT $output;
@@ -252,13 +254,23 @@ foreach (@artists)
 }
 {
     my $output;
-    $template->process('everyone.tmpl', { 
+    $blankTemplate->process('everyone.tmpl', { 
             'artists' => \@artistsVars,
             'baseDir' => $BASE_DIR,
         }, \$output)
-        || die $template->error();
+        || die $blankTemplate->error();
 
     open(OUTPUT, ">", "$OUTPUT_DIR/everyone-nolayout.html");
+    print OUTPUT $output;
+    close(OUTPUT);
+}
+foreach my $var (@artistsVars)
+{
+    my $output;
+    $blankTemplate->process('redirect.tmpl', $var, \$output) 
+        || die $blankTemplate->error();
+
+    open(OUTPUT, ">", "$OUTPUT_DIR2/" . $var->{'artist'} . '.php');
     print OUTPUT $output;
     close(OUTPUT);
 }
