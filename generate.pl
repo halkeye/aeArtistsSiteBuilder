@@ -22,13 +22,15 @@ my @artists = (
     ['Lian'           , 'Lian'],
     ['AlexiusSana'    , 'AlexiusSana'],
     ['AsakuraMisakichi','Asakura Misakichi'],
-    ['knightcat'      ,'knightcat'],
+    ['knightcat'      , 'knightcat'],
     ['Keiseki'        , 'Keiseki'],
     ['AmyDolphin'     , 'Amy Dolphin'],
     ['Atashi'         , 'Atashi'],
     ['skun'           , "S' kun"],
     ['Kat'            , "Kat"],
     ['RinnyChaomaster', 'Rinny / Chaomaster'],
+    ['Lithiel'        , 'Lithiel'],
+    ['SilentStudio'   , 'Silent Studio'],
 );
 
 my $MODE = "FAKE_AE";
