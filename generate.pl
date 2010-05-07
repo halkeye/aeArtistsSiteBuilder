@@ -274,3 +274,13 @@ foreach my $var (@artistsVars)
     print OUTPUT $output;
     close(OUTPUT);
 }
+
+{
+    my $output;
+    $blankTemplate->process('nameUrlMap.tmpl', { 'artists' => \@artistsVars,}, \$output)
+        || die $blankTemplate->error();
+
+    open(OUTPUT, ">", "nameUrlMap.html");
+    print OUTPUT $output;
+    close(OUTPUT);
+}

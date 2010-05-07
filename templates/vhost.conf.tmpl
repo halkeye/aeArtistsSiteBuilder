@@ -1,6 +1,6 @@
 [% SET mainURL = "http://www.animeevolution.com/" %]
 [% SET artURL = "http://www.animeevolution.com/?page_id=1559" %]
-[% SET volURL = "http://uchikoma.no-ip.org:8080/wiki/index.php/Main_Page" %]
+[% SET volURL = "http://uchikoma.no-ip.org:8080/wiki/index.php/" %]
 [% SET guestURL = "http://www.animeevolution.com/?page_id=1098" %]
 
 <VirtualHost *:80>
@@ -17,7 +17,6 @@
     ErrorLog "/var/log/httpd/ae09ag.com-error.log"
 
     RewriteEngine  on
-    RewriteRule    ^/.*                      [% mainURL %] [NC,L,R]
 ### For Uchi
     RewriteRule    ^/vol                     [% volURL %] [NC,L,R]
 ### For Art Gallery
@@ -26,6 +25,7 @@
     RewriteRule    ^/artGallery              [% artURL %] [NC,L,R]
 ### Rest of them
     RewriteRule    ^/guests?                 [% guestURL %] [NC,L,R]
+    RewriteRule    ^/.*                      [% mainURL %] [NC,L,R]
 </VirtualHost>
 
 <VirtualHost *:80>
@@ -35,7 +35,7 @@
     ErrorLog "/var/log/httpd/ae09ag.com-error.log"
 
     RewriteEngine  on
-    RewriteRule    ^/.*                      [% volURL %] [NC,L,R]
+    RewriteRule    ^/(.*)                      [% volURL %]$1 [NC,L,R]
 </VirtualHost>
 
 <VirtualHost *:80>
