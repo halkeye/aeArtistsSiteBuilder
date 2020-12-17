@@ -1,0 +1,9 @@
+name: aeArtistsSiteBuilder
+static_sites:
+  - name: web
+    github:
+      deploy_on_push: true
+      branch: main
+      repo: halkeye/aeArtistsSiteBuilder
+    dockerfile_path: Dockerfile
+    output_dir: /home/apache/vhosts/ae09ag.kodekoan.com/htdocs/

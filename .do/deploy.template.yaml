@@ -1,0 +1,9 @@
+spec:
+  name: sample-dockerfile-static
+  static_sites:
+    - name: web
+      git:
+        branch: main
+        repo_clone_url: https://github.com/halkeye/aeArtistsSiteBuilder.git
+      dockerfile_path: Dockerfile
+      output_dir: /home/apache/vhosts/ae09ag.kodekoan.com/htdocs/
